@@ -2,7 +2,7 @@ module Logic.Variable exposing (Id, Variable, toString)
 
 
 type alias Variable =
-    { name : String
+    { name : String -- N.B. The emtpy string is reserved for use internally.
     , id : Id
     }
 
