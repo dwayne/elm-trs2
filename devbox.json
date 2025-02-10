@@ -1,0 +1,17 @@
+{
+  "packages": {
+    "elmPackages.elm": "latest",
+    "elmPackages.elm-format": "latest",
+    "elmPackages.elm-test": "latest"
+  },
+  "env": {
+    "PROJECT": "$PWD",
+    "PATH": "$PWD/bin:$PATH"
+  },
+  "shell": {
+    "init_hook": [
+      "alias f='format'",
+      "alias t='elm-test'"
+    ]
+  }
+}
