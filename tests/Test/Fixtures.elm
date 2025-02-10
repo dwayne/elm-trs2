@@ -2,6 +2,7 @@ module Test.Fixtures exposing
     ( a
     , b
     , c
+    , d
     , u
     , v
     , vu
@@ -86,3 +87,7 @@ b =
 
 c =
     Const "c"
+
+
+d =
+    Const "d"
