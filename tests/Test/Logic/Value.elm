@@ -3,7 +3,7 @@ module Test.Logic.Value exposing (suite)
 import Expect
 import Logic.Value as Value exposing (Value(..))
 import Test exposing (Test, describe, test)
-import Test.Fixtures exposing (..)
+import Test.Logic.Fixtures exposing (..)
 
 
 suite : Test

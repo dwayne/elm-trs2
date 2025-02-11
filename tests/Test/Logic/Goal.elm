@@ -6,7 +6,7 @@ import Logic.Substitution exposing (Substitution)
 import Logic.Value exposing (Value(..))
 import Logic.Variable exposing (Variable)
 import Test exposing (Test, describe, test)
-import Test.Fixtures exposing (..)
+import Test.Logic.Fixtures exposing (..)
 
 
 suite : Test

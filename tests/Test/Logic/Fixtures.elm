@@ -1,4 +1,4 @@
-module Test.Fixtures exposing
+module Test.Logic.Fixtures exposing
     ( a
     , b
     , c
