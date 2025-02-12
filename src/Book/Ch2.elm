@@ -55,15 +55,25 @@ pairo p =
         )
 
 
+
+--singletono : Value a -> Goal a
+--singletono l =
+--    fresh
+--        (\d ->
+--            conj
+--                [ cdro l d
+--                , nullo d
+--                ]
+--        )
+
+
 singletono : Value a -> Goal a
 singletono l =
-    fresh
-        (\d ->
-            conj
-                [ cdro l d
-                , nullo d
-                ]
-        )
+    --
+    -- An alternative definition of singletono.
+    -- See frame 32 on page 43.
+    --
+    fresh (\a -> equals (list [ a ]) l)
 
 
 

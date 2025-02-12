@@ -18,6 +18,7 @@ module Logic exposing
     , customToString
     , disj
     , disj2
+    , dottedList
     , equals
     , fail
     , float
@@ -129,13 +130,20 @@ cons =
 
 
 list : List (Value a) -> Value a
-list vals =
-    case vals of
-        [] ->
-            null
+list =
+    List.foldr cons null
 
-        val :: restVals ->
-            cons val (list restVals)
+
+dottedList : Value a -> List (Value a) -> Value a -> Value a
+dottedList head tail last =
+    --
+    -- dottedList h [ t1, ..., tn ] l, where n >= 0
+    --
+    -- => cons h (cons t1 (cons ... (cons tn l)))
+    --
+    tail
+        |> List.foldr cons last
+        |> cons head
 
 
 car : Value a -> Maybe (Value a)

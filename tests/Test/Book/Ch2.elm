@@ -1,16 +1,16 @@
 module Test.Book.Ch2 exposing (suite)
 
 import Book.Ch2 exposing (..)
-import Expect
 import Logic exposing (..)
-import Test exposing (Test, describe, test)
+import Test exposing (Test, describe)
+import Test.Book.Fixtures exposing (testExample)
 
 
 suite : Test
 suite =
     describe "Book.Ch2" <|
         List.indexedMap
-            testLogic
+            testExample
             --
             -- caro
             --
@@ -241,14 +241,6 @@ suite =
               , output = "()"
               }
             ]
-
-
-testLogic : Int -> { input : List (Value String), output : String } -> Test
-testLogic n { input, output } =
-    test ("Example " ++ String.fromInt n) <|
-        \_ ->
-            toString input
-                |> Expect.equal output
 
 
 
