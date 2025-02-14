@@ -17,7 +17,7 @@ suite =
             [ { input = run (\q -> caro acorn q)
               , output = "(a)"
               }
-            , { input = run (\q -> caro acorn (string "a"))
+            , { input = run (\_ -> caro acorn (string "a"))
               , output = "(_0)"
               }
             , { input =
@@ -84,7 +84,7 @@ suite =
                         )
               , output = "(((raisin pear) a))"
               }
-            , { input = run (\q -> cdro acorn corn)
+            , { input = run (\_ -> cdro acorn corn)
               , output = "(_0)"
               }
             , { input = run (\x -> cdro corn (xrn x))
@@ -186,10 +186,10 @@ suite =
             --
             -- nullo
             --
-            , { input = run (\q -> nullo (list [ string "grape", string "raisin", string "pear" ]))
+            , { input = run (\_ -> nullo (list [ string "grape", string "raisin", string "pear" ]))
               , output = "()"
               }
-            , { input = run (\q -> nullo null)
+            , { input = run (\_ -> nullo null)
               , output = "(_0)"
               }
             , { input = run (\x -> nullo x)
@@ -212,7 +212,7 @@ suite =
             , { input = run (\q -> pairo (cons q q))
               , output = "(_0)"
               }
-            , { input = run (\q -> pairo null)
+            , { input = run (\_ -> pairo null)
               , output = "()"
               }
             , { input = run (\x -> pairo x)
@@ -225,7 +225,7 @@ suite =
             --
             -- singletono
             --
-            , { input = run (\q -> singletono null)
+            , { input = run (\_ -> singletono null)
               , output = "()"
               }
             , { input = run (\x -> singletono (cons x null))

@@ -245,7 +245,7 @@ highLevelSuite =
                     """
               , values =
                     run Unbounded
-                        (\q ->
+                        (\_ ->
                             conda
                                 [ [ fail, succeed ]
                                 , [ succeed, fail ]
@@ -262,7 +262,7 @@ highLevelSuite =
                     """
               , values =
                     run Unbounded
-                        (\q ->
+                        (\_ ->
                             conda
                                 [ [ fail, succeed ]
                                 , [ succeed, succeed ]
@@ -279,7 +279,7 @@ highLevelSuite =
                     """
               , values =
                     run Unbounded
-                        (\q ->
+                        (\_ ->
                             conda
                                 [ [ succeed, fail ]
                                 , [ succeed, succeed ]
@@ -296,7 +296,7 @@ highLevelSuite =
                     """
               , values =
                     run Unbounded
-                        (\q ->
+                        (\_ ->
                             conda
                                 [ [ succeed, succeed ]
                                 , [ succeed, fail ]
@@ -313,7 +313,7 @@ highLevelSuite =
                     """
               , values =
                     run Unbounded
-                        (\q ->
+                        (\_ ->
                             condu
                                 [ [ always, succeed ]
                                 , [ succeed, fail ]
@@ -322,7 +322,7 @@ highLevelSuite =
               , expected = "(_0)"
               }
             , { description = "(run 5 q (very-recursiveo))"
-              , values = run (AtMost 5) (\q -> veryRecursiveo)
+              , values = run (AtMost 5) (\_ -> veryRecursiveo)
               , expected = "(_0 _0 _0 _0 _0)"
               }
             ]

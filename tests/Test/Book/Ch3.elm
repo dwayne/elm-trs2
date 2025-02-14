@@ -36,7 +36,7 @@ suite =
             --
             , { input =
                     run
-                        (\q ->
+                        (\_ ->
                             fresh2
                                 (\x y ->
                                     lolo <|
@@ -54,7 +54,7 @@ suite =
               }
             , { input =
                     runAtMost 1
-                        (\q ->
+                        (\_ ->
                             fresh
                                 (\x ->
                                     lolo (cons (list [ string "a", string "b" ]) x)
@@ -170,7 +170,7 @@ suite =
             --
             -- membero
             --
-            , { input = run (\q -> membero olive (list [ virgin, olive, oil ]))
+            , { input = run (\_ -> membero olive (list [ virgin, olive, oil ]))
               , output = "(_0)"
               }
             , { input = runAtMost 1 (\y -> membero y (list [ hummus, with, pita ]))
