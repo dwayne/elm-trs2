@@ -9,9 +9,6 @@
     "PATH": "$PWD/bin:$PATH"
   },
   "shell": {
-    "init_hook": [
-      "alias f='format'",
-      "alias t='elm-test'"
-    ]
+    "init_hook": [". .bashrc"]
   }
 }
