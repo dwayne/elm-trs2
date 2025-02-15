@@ -35,6 +35,7 @@ module Logic exposing
     , list
     , never
     , null
+    , once
     , run
     , run2
     , run2AtMost
@@ -289,6 +290,11 @@ fresh8 =
 
 
 -- NON-RELATIONAL
+
+
+once : Goal a -> Goal a
+once =
+    Logic.Goal.once
 
 
 conda : List (List (Goal a)) -> Goal a
