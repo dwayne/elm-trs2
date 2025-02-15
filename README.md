@@ -227,6 +227,7 @@ Notice the missing `conj`.
   - There would be one less indentation level.
 - Disadvantages
   - I won't be able to write `fresh (\x -> g x)` as `fresh g` anymore.
+  - I lose flexibility in the body of a `fresh` since it will always have to be a conjunction of goals.
 
 ### Alternative API for `run`
 
@@ -237,3 +238,9 @@ run : Length -> (Value a -> List (Goal a)) -> List (Value a)
 ```
 
 And, it leads to similar advantages and disadvantages as it did for `fresh`.
+
+### About `ReifiedVar`
+
+- Explain how it came to be
+- Explain how you can get a reified-name substitution type using it
+- Is it worth the hassle?
