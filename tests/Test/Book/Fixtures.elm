@@ -1,4 +1,4 @@
-module Test.Book.Fixtures exposing (testExample)
+module Test.Book.Fixtures exposing (testExample, toOutput)
 
 import Expect
 import Logic exposing (Value)
@@ -11,3 +11,8 @@ testExample n { input, output } =
         \_ ->
             Logic.toString input
                 |> Expect.equal output
+
+
+toOutput : List String -> String
+toOutput strings =
+    "(" ++ String.join " " strings ++ ")"
