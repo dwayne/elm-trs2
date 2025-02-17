@@ -9,6 +9,7 @@ module Book.Ch7 exposing
     , halfAddero
     , lengtho
     , minuso
+    , numOne
     , one
     , pluso
     , poso
