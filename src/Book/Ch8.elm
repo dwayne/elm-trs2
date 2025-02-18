@@ -1,7 +1,24 @@
-module Book.Ch8 exposing (timeso)
+module Book.Ch8 exposing
+    ( equalLo
+    , lessThanLo
+    , lessThanOrEqualLo
+    , lessThanOrEqualo
+    , lessThano
+    , timeso
+    )
 
 import Book.Ch7 exposing (..)
 import Logic exposing (..)
+
+
+
+--
+-- TODO:
+--
+-- - Division
+-- - Logarithm
+-- - Exponentiation
+--
 
 
 timeso : Value a -> Value a -> Value a -> Goal a
@@ -160,3 +177,111 @@ boundTimeso q p n m =
                 )
           ]
         ]
+
+
+equalLo : Value a -> Value a -> Goal a
+equalLo n m =
+    conde
+        [ [ equals numZero n, equals numZero m ]
+        , [ equals numOne n, equals numOne m ]
+        , [ fresh4
+                (\a x b y ->
+                    conj
+                        -- n is of the form `(,a . ,x) with x >= 1
+                        [ equals (cons a x) n
+                        , poso x
+
+                        -- m is of the form `(,b . ,y) with y >= 1
+                        , equals (cons b y) m
+                        , poso y
+
+                        -- x and y should have the same length
+                        , lazy (\_ -> equalLo x y)
+
+                        -- N.B. a and b are not related in any way
+                        ]
+                )
+          ]
+        ]
+
+
+lessThanLo : Value a -> Value a -> Goal a
+lessThanLo n m =
+    --
+    -- N.B. lessThanLo n n, has no value.
+    --
+    conde
+        [ [ equals numZero n, poso m ]
+        , [ equals numOne n, greaterThan1o m ]
+        , [ fresh4
+                (\a x b y ->
+                    conj
+                        -- n is of the form `(,a . ,x) with x >= 1
+                        [ equals (cons a x) n
+                        , poso x
+
+                        -- m is of the form `(,b . ,y) with y >= 1
+                        , equals (cons b y) m
+                        , poso y
+
+                        -- the length of x should be less than the length of y
+                        , lazy (\_ -> lessThanLo x y)
+
+                        -- N.B. a and b are not related in any way
+                        ]
+                )
+          ]
+        ]
+
+
+lessThanOrEqualLo : Value a -> Value a -> Goal a
+lessThanOrEqualLo n m =
+    --
+    --conde
+    --    [ [ equalLo n m ]
+    --    , [ lessThanLo n m ]
+    --    ]
+    --
+    -- or,
+    --
+    --disj
+    --    [ equalLo n m
+    --    , lessThanLo n m
+    --    ]
+    --
+    -- or,
+    --
+    disj2
+        (equalLo n m)
+        (lessThanLo n m)
+
+
+lessThano : Value a -> Value a -> Goal a
+lessThano n m =
+    --
+    -- n < m iff either
+    --
+    -- 1. |n| < |m|, or
+    -- 2. |n| = |m| and there exists an x >= 1 such that n + x = m
+    --
+    -- N.B. lessThano n n, has no value since it uses lessThanLo.
+    --
+    conde
+        [ [ lessThanLo n m ]
+        , [ equalLo n m
+          , fresh
+                (\x ->
+                    conj
+                        [ poso x
+                        , pluso n x m
+                        ]
+                )
+          ]
+        ]
+
+
+lessThanOrEqualo : Value a -> Value a -> Goal a
+lessThanOrEqualo n m =
+    disj2
+        (equals n m)
+        (lessThano n m)
