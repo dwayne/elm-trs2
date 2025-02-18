@@ -1,10 +1,22 @@
 module Book.Ch9 exposing
-    ( notPastao
+    ( bumpo
+    , notPastao
     , onceo
     , pasta
     )
 
+import Book.Ch7 exposing (..)
 import Logic exposing (..)
+
+
+
+--
+-- TODO:
+--
+-- - genAndTestPluso
+-- - enumeratePluso
+-- - enumerateo
+--
 
 
 notPastao : Value a -> Goal a
@@ -32,3 +44,17 @@ onceo g =
         [ [ g, succeed ]
         , [ succeed, fail ]
         ]
+
+
+bumpo : Value a -> Value a -> Goal a
+bumpo n x =
+    disj2
+        (equals n x)
+        (fresh
+            (\m ->
+                conj
+                    [ minuso n numOne m
+                    , lazy (\_ -> bumpo m x)
+                    ]
+            )
+        )

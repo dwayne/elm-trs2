@@ -2,16 +2,11 @@ module Test.Book.Ch9 exposing (suite)
 
 import Book.Ch1 exposing (..)
 import Book.Ch6 exposing (..)
+import Book.Ch7 exposing (..)
 import Book.Ch9 exposing (..)
 import Logic exposing (..)
 import Test exposing (Test, describe)
-import Test.Book.Fixtures exposing (testExample)
-
-
-
---
--- N.B. I already tested parts of Chapter 9, frames 1-4, and 14, in Test.Logic.Goal.
---
+import Test.Book.Fixtures exposing (testExample, toOutput)
 
 
 suite : Test
@@ -171,6 +166,23 @@ suite =
                                 ]
                         )
               , output = "(#f)"
+              }
+
+            --
+            -- bumpo
+            --
+            , { input = run (bumpo (list [ one, one, one ]))
+              , output =
+                    toOutput
+                        [ "(1 1 1)"
+                        , "(0 1 1)"
+                        , "(1 0 1)"
+                        , "(0 0 1)"
+                        , "(1 1)"
+                        , "(0 1)"
+                        , "(1)"
+                        , "()"
+                        ]
               }
             ]
 
