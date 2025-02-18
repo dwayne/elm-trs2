@@ -13,12 +13,12 @@ timeso n m p =
         -- n == 0, m
         --
         -- 0 * m = 0 = p
-        [ [ equals null n, equals null p ]
+        [ [ equals numZero n, equals numZero p ]
 
         -- n >= 1, m == 0
         --
         -- n * 0 = 0 = p
-        , [ poso n, equals null m, equals null p ]
+        , [ poso n, equals numZero m, equals numZero p ]
 
         -- n == 1, m >= 1
         --
@@ -134,7 +134,7 @@ boundTimeso q p n m =
         -- q == 0, p >= 1
         --
         -- |q| < |p|
-        [ [ equals null q, poso p ]
+        [ [ equals numZero q, poso p ]
 
         -- q >= 1, p >= 1
         , [ fresh7
@@ -146,9 +146,9 @@ boundTimeso q p n m =
                             -- n == 0, m >= 1
                             --
                             -- We've run out of bits in n so start using bits from m.
-                            [ [ equals null n
+                            [ [ equals numZero n
                               , equals (cons a2 z) m
-                              , lazy (\_ -> boundTimeso x y z null)
+                              , lazy (\_ -> boundTimeso x y z numZero)
                               ]
 
                             -- n >= 1

@@ -10,6 +10,7 @@ module Book.Ch7 exposing
     , lengtho
     , minuso
     , numOne
+    , numZero
     , one
     , pluso
     , poso
@@ -141,6 +142,11 @@ isOdd =
     not << isEven
 
 
+numZero : Value a
+numZero =
+    null
+
+
 numOne : Value a
 numOne =
     list [ one ]
@@ -173,13 +179,13 @@ addero b n m r =
         -- b == 0, n >= 0, m == 0
         --
         -- 0 + n + 0 = n = r
-        [ [ equals zero b, equals null m, equals n r ]
+        [ [ equals zero b, equals numZero m, equals n r ]
 
         -- b == 0, n == 0, m > 0
         --
         -- 0 + 0 + m = m = r
         , [ equals zero b
-          , equals null n
+          , equals numZero n
           , equals m r
           , poso m
           ]
@@ -188,7 +194,7 @@ addero b n m r =
         --
         -- 1 + n + 0 = 0 + n + 1 = r
         , [ equals one b
-          , equals null m
+          , equals numZero m
           , lazy (\_ -> addero zero n numOne r)
           ]
 
@@ -196,7 +202,7 @@ addero b n m r =
         --
         -- 1 + 0 + m = 0 + 1 + m = r
         , [ equals one b
-          , equals null n
+          , equals numZero n
           , poso m
           , lazy (\_ -> addero zero numOne m r)
           ]
@@ -307,7 +313,7 @@ minuso n m k =
 lengtho : Value a -> Value a -> Goal a
 lengtho l n =
     conde
-        [ [ nullo l, equals null n ]
+        [ [ nullo l, equals numZero n ]
         , [ fresh2
                 (\d res ->
                     conj
