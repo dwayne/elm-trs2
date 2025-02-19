@@ -1,9 +1,12 @@
 module Book.Ch8 exposing
-    ( equalLo
+    ( divo
+    , equalLo
     , lessThanLo
     , lessThanOrEqualLo
     , lessThanOrEqualo
     , lessThano
+    , originalDivo
+    , splito
     , timeso
     )
 
@@ -15,7 +18,6 @@ import Logic exposing (..)
 --
 -- TODO:
 --
--- - Division
 -- - Logarithm
 -- - Exponentiation
 --
@@ -285,3 +287,184 @@ lessThanOrEqualo n m =
     disj2
         (equals n m)
         (lessThano n m)
+
+
+originalDivo : Value a -> Value a -> Value a -> Value a -> Goal a
+originalDivo n m q r =
+    --
+    -- n ÷ m produces q and r such that n = m * q + r and 0 <= r < m
+    --
+    conde
+        -- Case 1: n < m
+        --
+        -- q == 0, n == r, n < m
+        [ [ equals numZero q, equals n r, lessThano n m ]
+
+        -- Case 2: n == m
+        --
+        -- q == 1, r == 0, n == m, r < m
+        --
+        -- Q: Why is r < m needed?
+        -- A: 1. r < m => m > 0 so that division by zero is avoided
+        --    2. r < m => n > r, i.e. n /= r so that Case 2 does not overlap with Case 1
+        --
+        , [ equals numOne q, equals numZero r, equals n m, lessThano r m ]
+
+        -- Case 3: n > m
+        --
+        -- m < n, r < m
+        , [ lessThano m n
+          , lessThano r m
+          , fresh
+                (\mq ->
+                    conj
+                        -- Q: Why not use lessThano?
+                        -- A: lessThanOrEqualLo is a closer approximation of lessThano.
+                        --    If mq <= n then certainly |mq| <= |n|.
+                        --
+                        [ lessThanOrEqualLo mq n -- |mq| <= |n|
+                        , timeso m q mq -- mq = m * q
+                        , pluso mq r n -- n = mq + r
+                        ]
+                )
+          ]
+        ]
+
+
+splito : Value a -> Value a -> Value a -> Value a -> Goal a
+splito n r l h =
+    --
+    -- Let p = |r| + 1.
+    --
+    -- Split n into l and h such that n = h * 2^p + l,
+    -- where l has at most p bits.
+    --
+    -- N.B. The complexity appears because we must not allow
+    --      the list (0) to represent a number.
+    --
+    conde
+        -- n == 0, h == 0, l == 0
+        --
+        -- It doesn't matter the |r|+1.
+        [ [ equals numZero n, equals numZero h, equals numZero l ]
+
+        -- n is even, n >= 2, |r|+1 == 1
+        , [ fresh2
+                (\b nn ->
+                    conj
+                        [ equals (cons zero (cons b nn)) n
+                        , equals numZero r
+                        , equals (cons b nn) h
+                        , equals numZero l
+                        ]
+                )
+          ]
+
+        -- n is odd, n >= 1, |r|+1 == 1
+        , [ fresh
+                (\nn ->
+                    conj
+                        [ equals (cons one nn) n
+                        , equals numZero r
+                        , equals nn h
+                        , equals numOne l
+                        ]
+                )
+          ]
+
+        -- n is even, n >= 2, |r|+1 >= 2, l == 0
+        , [ fresh4
+                (\b nn a rr ->
+                    conj
+                        [ equals (cons zero (cons b nn)) n
+                        , equals (cons a rr) r
+                        , equals numZero l
+                        , lazy (\_ -> splito (cons b nn) rr numZero h)
+                        ]
+                )
+          ]
+
+        -- n is odd, n >= 1, |r|+1 >= 2, l == 1
+        , [ fresh3
+                (\nn a rr ->
+                    conj
+                        [ equals (cons one nn) n
+                        , equals (cons a rr) r
+                        , equals numOne l
+                        , lazy (\_ -> splito nn rr numZero h)
+                        ]
+                )
+          ]
+
+        -- n >= 1, |r|+1 >= 2, l >= 2
+        , [ fresh5
+                (\b nn a rr ll ->
+                    conj
+                        [ equals (cons b nn) n
+                        , equals (cons a rr) r
+                        , equals (cons b ll) l
+                        , poso ll
+                        , lazy (\_ -> splito nn rr ll h)
+                        ]
+                )
+          ]
+        ]
+
+
+divo : Value a -> Value a -> Value a -> Value a -> Goal a
+divo n m q r =
+    --
+    -- n ÷ m produces q and r such that n = m * q + r and 0 <= r < m
+    --
+    conde
+        -- Case 1: n < m
+        --
+        -- q == 0, r == n, n < m
+        [ [ equals numZero q, equals r n, lessThano n m ]
+
+        -- Case 2: |n| == |m|, i.e. n and m have the same number of bits
+        --
+        -- q == 1, |n| == |m|, n = m + r, r < m
+        , [ equals numOne q
+          , equalLo m n
+          , pluso r m n
+          , lessThano r m
+          ]
+
+        -- Case 3: |n| > |m|, i.e. n has more bits than m
+        --
+        -- q >= 1, |m| < |n|, r < m
+        , [ poso q
+          , lessThanLo m n
+          , lessThano r m
+          , lazy (\_ -> nWiderThanMo n m q r)
+          ]
+        ]
+
+
+nWiderThanMo : Value a -> Value a -> Value a -> Value a -> Goal a
+nWiderThanMo n m q r =
+    fresh8
+        (\nHigh nLow qHigh qLow mqLow mrqLow rr rHigh ->
+            conj
+                [ splito n r nLow nHigh
+                , splito q r qLow qHigh
+                , conde
+                    -- nHigh == 0
+                    [ [ equals numZero nHigh
+                      , equals numZero qHigh
+                      , minuso nLow r mqLow
+                      , timeso m qLow mqLow
+                      ]
+
+                    -- nHigh >= 1
+                    , [ poso nHigh
+                      , timeso m qLow mqLow
+                      , pluso r mqLow mrqLow
+                      , minuso mrqLow nLow rr
+                      , splito rr r numZero rHigh
+                      , divo nHigh m qHigh rHigh
+                      ]
+                    ]
+                ]
+        )

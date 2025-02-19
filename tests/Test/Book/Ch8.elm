@@ -212,4 +212,108 @@ suite =
             , { input = run (\_ -> lessThanOrEqualo (list [ one, zero, one ]) (list [ one, zero, one ]))
               , output = "(_0)"
               }
+
+            --
+            -- originalDivo
+            --
+            , { input = run4AtMost 5 originalDivo
+              , output =
+                    toOutput
+                        [ "(() (_0 . _1) () ())" -- 0 ÷ m where m >= 1 produces q = 0, r = 0
+                        , "((1) (_0 _1 . _2) () (1))" -- 1 ÷ m where m >= 2 produces q = 0, r = 1
+                        , "((_0 . _1) (_0 . _1) (1) ())" -- n ÷ n where n >= 1 produces q = 1, r = 0
+                        , "((_0 1) (_1 _2 _3 . _4) () (_0 1))" -- (2|3) ÷ m where m >= 4 produces q = 0, r = 2|3
+                        , "((_0 _1 1) (_2 _3 _4 _5 . _6) () (_0 _1 1))" -- (4|5|6|7) ÷ m where m >= 8 produces q = 0, r = 4|5|6|7
+                        ]
+              }
+            , { input =
+                    run
+                        (\m ->
+                            fresh
+                                (\r ->
+                                    -- Q: Find m and r such that 5 ÷ m produces q = 7 and r.
+                                    -- A: No such m and r exists.
+                                    originalDivo (list [ one, zero, one ]) m (list [ one, one, one ]) r
+                                )
+                        )
+              , output = "()"
+              }
+
+            --
+            -- The following has no value.
+            --
+            -- We cannot divide an odd number by 2 and get a remainder of 0. However, originalDivo never stops looking
+            -- for values of y and z that satisfy the division relation, although there are no such values.
+            -- Instead, we would like originalDivo to fail immediately.
+            --
+            --, { input = run2AtMost 3 (\y z -> originalDivo (cons one (cons zero y)) (list [ zero, one ]) z numZero)
+            --  , output = "()"
+            --  }
+            --
+            --
+            -- splito
+            --
+            , { input = run2 (splito (list [ zero, zero, one, zero, one ]) numZero)
+              , output = "((() (0 1 0 1)))"
+              }
+            , { input = run2 (splito (list [ zero, zero, one, zero, one ]) numOne)
+              , output = "((() (1 0 1)))"
+              }
+            , { input = run2 (splito (list [ zero, zero, one, zero, one ]) (list [ zero, one ]))
+              , output = "(((0 0 1) (0 1)))"
+              }
+            , { input = run2 (splito (list [ zero, zero, one, zero, one ]) (list [ one, one ]))
+              , output = "(((0 0 1) (0 1)))"
+              }
+            , { input = run2 (splito (list [ zero, zero, one, zero, one ]) (list [ zero, zero, one ]))
+              , output = "(((0 0 1) (1)))"
+              }
+            , { input = run3 (splito (list [ zero, zero, one, zero, one ]))
+              , output =
+                    toOutput
+                        [ "(() () (0 1 0 1))"
+                        , "((_0) () (1 0 1))"
+                        , "((_0 _1) (0 0 1) (0 1))"
+                        , "((_0 _1 _2) (0 0 1) (1))"
+                        , "((_0 _1 _2 _3) (0 0 1 0 1) ())"
+                        , "((_0 _1 _2 _3 _4 . _5) (0 0 1 0 1) ())"
+                        ]
+              }
+            , { input = run4AtMost 5 divo
+              , output =
+                    toOutput
+                        [ "(() (_0 . _1) () ())" -- 0 ÷ m where m >= 1 produces q = 0, r = 0
+                        , "((1) (_0 _1 . _2) () (1))" -- 1 ÷ m where m >= 2 produces q = 0, r = 1
+                        , "((1) (1) (1) ())" -- 1 ÷ 1 produces q = 1, r = 0
+                        , "((_0 1) (_1 _2 _3 . _4) () (_0 1))" -- (2|3) ÷ m where m >= 4 produces q = 0, r = 2|3
+                        , "((_0 1) (_0 1) (1) ())" -- (2 ÷ 2|3 ÷ 3) produces q = 1, r = 0
+                        ]
+              }
+            , { input =
+                    run
+                        (\m ->
+                            fresh
+                                (\r ->
+                                    -- Q: Find m and r such that 5 ÷ m produces q = 7 and r.
+                                    -- A: No such m and r exists.
+                                    divo (list [ one, zero, one ]) m (list [ one, one, one ]) r
+                                )
+                        )
+              , output = "()"
+              }
+            , { input = run2AtMost 3 (\y z -> divo (cons one (cons zero y)) (list [ zero, one ]) z numZero)
+              , output = "()"
+              }
+
+            --
+            -- (6 + 8k) ÷ 4 does not have a remainder of 0 or 1, for all possible values of k
+            --
+            -- N.B. dottedList zero [ one, one ] k = 6 + 8k for k >= 0
+            --
+            , { input = run2 (\k q -> divo (dottedList zero [ one, one ] k) (list [ zero, zero, one ]) q numZero)
+              , output = "()"
+              }
+            , { input = run2 (\k q -> divo (dottedList zero [ one, one ] k) (list [ zero, zero, one ]) q numOne)
+              , output = "()"
+              }
             ]
