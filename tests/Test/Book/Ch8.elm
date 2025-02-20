@@ -329,8 +329,7 @@ suite =
               }
 
             --
-            -- 1. Takes long.
-            -- 2. Doesn't pass.
+            -- This doesn't pass.
             --
             --, { input =
             --        run3AtMost 9
@@ -365,4 +364,31 @@ suite =
             -- 68 = 6^2 + 32, and
             -- 68 = 7^2 + 19.
             --}
+            --
+            -- expo
+            --
+            , { input =
+                    -- 3^0 = 1
+                    run (expo (list [ one, one ]) numZero)
+              , output = "((1))"
+              }
+            , { input =
+                    -- 3^1 = 3
+                    run (expo (list [ one, one ]) numOne)
+              , output = "((1 1))"
+              }
+
+            --
+            -- These don't pass.
+            --
+            --, { input =
+            --        -- 3^2 = 9
+            --        run (expo (list [one, one]) (list [zero, one]))
+            --  , output = "((1 0 0 1))"
+            --  }
+            --, { input =
+            --        -- 3^5 = 243
+            --        run (expo (list [one, one]) (list [one, zero, one]))
+            --  , output = "((1 1 0 0 1 1 1 1))"
+            --  }
             ]

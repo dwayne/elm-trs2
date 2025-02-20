@@ -1,6 +1,7 @@
 module Book.Ch8 exposing
     ( divo
     , equalLo
+    , expo
     , lessThanLo
     , lessThanOrEqualLo
     , lessThanOrEqualo
@@ -662,3 +663,8 @@ repeatedMulo n q nq =
                 )
           ]
         ]
+
+
+expo : Value a -> Value a -> Value a -> Goal a
+expo b q n =
+    logo n b q numZero
