@@ -184,6 +184,13 @@ suite =
                         , "()"
                         ]
               }
+
+            --
+            -- genAndTestPluso
+            --
+            , { input = run (\_ -> genAndTestPluso (list [ zero, zero, one ]) (list [ one, one ]) (list [ one, one, one ]))
+              , output = "(_0)" -- because 4 + 3 = 7
+              }
             ]
 
 

@@ -1,5 +1,6 @@
 module Book.Ch9 exposing
     ( bumpo
+    , genAndTestPluso
     , notPastao
     , onceo
     , pasta
@@ -13,7 +14,6 @@ import Logic exposing (..)
 --
 -- TODO:
 --
--- - genAndTestPluso
 -- - enumeratePluso
 -- - enumerateo
 --
@@ -58,3 +58,17 @@ bumpo n x =
                     ]
             )
         )
+
+
+genAndTestPluso : Value a -> Value a -> Value a -> Goal a
+genAndTestPluso i j k =
+    onceo <|
+        fresh3
+            (\x y z ->
+                conj
+                    [ pluso x y z
+                    , equals i x
+                    , equals j y
+                    , equals k z
+                    ]
+            )

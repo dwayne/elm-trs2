@@ -224,7 +224,7 @@ addero b n m r =
         -- b, n == 1, m > 1, r > 1
         --
         -- b + 1 + m = r
-        , [ equals numOne n, genAddero b n m r ]
+        , [ equals numOne n, lazy (\_ -> genAddero b n m r) ]
 
         -- b, n > 1, m == 1, r > 1
         --
@@ -238,7 +238,7 @@ addero b n m r =
         -- b, n > 1, m > 1, r > 1
         --
         -- b + n + m = r
-        , [ greaterThan1o n, genAddero b n m r ]
+        , [ greaterThan1o n, lazy (\_ -> genAddero b n m r) ]
         ]
 
 
