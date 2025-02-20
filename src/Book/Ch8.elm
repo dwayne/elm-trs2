@@ -5,22 +5,15 @@ module Book.Ch8 exposing
     , lessThanOrEqualLo
     , lessThanOrEqualo
     , lessThano
+    , logo
     , originalDivo
     , splito
     , timeso
     )
 
+import Book.Ch4 exposing (..)
 import Book.Ch7 exposing (..)
 import Logic exposing (..)
-
-
-
---
--- TODO:
---
--- - Logarithm
--- - Exponentiation
---
 
 
 timeso : Value a -> Value a -> Value a -> Goal a
@@ -468,3 +461,204 @@ nWiderThanMo n m q r =
                     ]
                 ]
         )
+
+
+logo : Value a -> Value a -> Value a -> Value a -> Goal a
+logo n b q r =
+    --
+    -- logo n b q r holds if n = b^q + r,
+    --
+    -- where r >= 0 and q is the largest number that satisfies the relation.
+    --
+    -- N.B. I currently don't fully understand all the details of logo and
+    --      its associated helper functions, exp2o and baseThreeOrMoreo.
+    --
+    conde
+        -- q == 0, n <= b
+        --
+        -- n = b^0 + r
+        --   = 1 + r
+        [ [ equals numZero q
+          , lessThano n b
+          , pluso r numOne n
+          ]
+
+        -- q == 1, b > 1, |n| = |b|
+        --
+        -- n = b^1 + r
+        --   = b + r
+        , [ equals numOne q
+          , greaterThan1o b
+          , equalLo n b
+          , pluso r b n
+          ]
+
+        -- q >= 1, b == 1
+        --
+        -- n = 1^q + r
+        --   = 1 + r
+        , [ equals numOne b
+          , poso q
+          , pluso r numOne n
+          ]
+
+        -- q >= 1, b == 0
+        --
+        -- n = 0^q + r
+        --   = 0 + r
+        --   = r
+        , [ equals numZero b
+          , poso q
+          , equals r n
+          ]
+
+        -- b == 2
+        , [ equals numTwo b
+          , fresh3
+                (\a ad dd ->
+                    conj
+                        -- dd >= 1, n >= 4
+                        [ poso dd
+                        , equals (cons a (cons ad dd)) n
+                        , exp2o n numZero q
+                        , fresh
+                            (\s ->
+                                splito n dd r s
+                            )
+                        ]
+                )
+          ]
+
+        -- b >= 3, |b| < |n|
+        , [ lessThanOrEqualo numThree b
+          , lessThanLo b n
+          , baseThreeOrMoreo n b q r
+          ]
+        ]
+
+
+numTwo : Value a
+numTwo =
+    list [ zero, one ]
+
+
+numThree : Value a
+numThree =
+    list [ one, one ]
+
+
+exp2o : Value a -> Value a -> Value a -> Goal a
+exp2o n b q =
+    conde
+        [ [ equals numOne n, equals numZero q ]
+        , [ greaterThan1o n
+          , equals numOne q
+          , fresh
+                (\s ->
+                    splito n b s numOne
+                )
+          ]
+        , [ fresh2
+                (\q1 b2 ->
+                    conj
+                        [ equals (cons zero q1) q
+                        , poso q1
+                        , lessThanLo b n
+                        , appendo b (cons one b) b2
+                        , lazy (\_ -> exp2o n b2 q1)
+                        ]
+                )
+          ]
+        , [ fresh4
+                (\q1 nHigh b2 s ->
+                    conj
+                        [ equals (cons one q1) q
+                        , poso q1
+                        , poso nHigh
+                        , splito n b s nHigh
+                        , appendo b (cons one b) b2
+                        , lazy (\_ -> exp2o nHigh b2 q1)
+                        ]
+                )
+          ]
+        ]
+
+
+baseThreeOrMoreo : Value a -> Value a -> Value a -> Value a -> Goal a
+baseThreeOrMoreo n b q r =
+    fresh7
+        (\bw1 bw nw nw1 qLow1 qLow s ->
+            conj
+                [ exp2o b numZero bw1
+                , pluso bw1 numOne bw
+                , lessThanLo q n
+                , fresh2
+                    (\q1 bwq1 ->
+                        conj
+                            [ pluso q numOne q1
+                            , timeso bw q1 bwq1
+                            , lessThano nw1 bwq1
+                            ]
+                    )
+                , exp2o n numZero nw1
+                , pluso nw1 numOne nw
+                , divo nw bw qLow1 s
+                , pluso qLow numOne qLow1
+                , lessThanOrEqualLo qLow q
+                , fresh5
+                    (\bqLow qHigh t qdHigh qd ->
+                        conj
+                            [ repeatedMulo b qLow bqLow
+                            , divo nw bw1 qHigh t
+                            , pluso qLow qdHigh qHigh
+                            , pluso qLow qd q
+                            , lessThanOrEqualo qd qdHigh
+                            , fresh3
+                                (\bqd bq1 bq ->
+                                    conj
+                                        [ repeatedMulo b qd bqd
+                                        , timeso bqLow bqd bq
+                                        , timeso b bq bq1
+                                        , pluso bq r n
+                                        , lessThano n bq1
+                                        ]
+                                )
+                            ]
+                    )
+                ]
+        )
+
+
+repeatedMulo : Value a -> Value a -> Value a -> Goal a
+repeatedMulo n q nq =
+    --
+    -- n * n * ... * n (q times)
+    --
+    conde
+        -- q == 0, n >= 1
+        --
+        -- nq = 1
+        [ [ poso n, equals numZero q, equals numOne nq ]
+
+        -- q = 1
+        --
+        -- nq = n
+        , [ equals numOne q, equals n nq ]
+
+        -- q > 1
+        , [ fresh2
+                (\q1 nq1 ->
+                    conj
+                        -- q1 + 1 = q, i.e. q1 = q - 1
+                        [ pluso q1 numOne q
+
+                        -- nq1 = n * n * ... * n (q-1 times)
+                        , lazy (\_ -> repeatedMulo n q1 nq1)
+
+                        -- nq = n * nq1
+                        --    = n * n * n * ... * n (q times)
+                        , timeso nq1 n nq
+                        ]
+                )
+          ]
+        ]

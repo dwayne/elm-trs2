@@ -316,4 +316,53 @@ suite =
             , { input = run2 (\k q -> divo (dottedList zero [ one, one ] k) (list [ zero, zero, one ]) q numOne)
               , output = "()"
               }
+
+            --
+            -- logo
+            --
+            , { input =
+                    -- n = 14, b = 2, q = 3
+                    --
+                    -- 14 = 2^3 + r => r = 6
+                    run (logo (list [ zero, one, one, one ]) (list [ zero, one ]) (list [ one, one ]))
+              , output = "((0 1 1))"
+              }
+
+            --
+            -- 1. Takes long.
+            -- 2. Doesn't pass.
+            --
+            --, { input =
+            --        run3AtMost 9
+            --            (\b q r ->
+            --                conj
+            --                    [ logo (list [zero, zero, one, zero, zero, zero, one]) b q r
+            --                    , greaterThan1o q
+            --                    ]
+            --            )
+            --  , output =
+            --        toOutput
+            --            [ "(() (_0 _1 . _2) (0 0 1 0 0 0 1))"
+            --            , "((1) (_0 _1 . _2) (1 1 0 0 0 0 1))"
+            --            , "((0 1) (0 1 1) (0 0 1))"
+            --            , "((1 1) (1 1) (1 0 0 1 0 1))"
+            --            , "((0 0 1) (1 1) (0 0 1))"
+            --            , "((0 0 0 1) (0 1) (0 0 1))"
+            --            , "((1 0 1) (0 1) (1 1 0 1 0 1))"
+            --            , "((0 1 1) (0 1) (0 0 0 0 0 1))"
+            --            , "((1 1 1) (0 1) (1 1 0 0 1))"
+            --            ]
+            --
+            -- since,
+            --
+            -- 68 = 0^q + 68 where q > 1 (Q: Shouldn't it be for q >= 1?)
+            -- 68 = 1^q + 67 where q > 1 (Q: Same. Shouldn't it also work when q == 1?)
+            -- 68 = 2^6 + 4
+            -- 68 = 3^3 + 41
+            -- 68 = 4^3 + 4
+            -- 68 = 8^2 + 4
+            -- 68 = 5^2 + 43
+            -- 68 = 6^2 + 32, and
+            -- 68 = 7^2 + 19.
+            --}
             ]
