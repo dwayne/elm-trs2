@@ -1,5 +1,7 @@
 module Book.Ch9 exposing
     ( bumpo
+    , enumeratePluso
+    , enumerateo
     , genAndTestPluso
     , notPastao
     , onceo
@@ -8,15 +10,6 @@ module Book.Ch9 exposing
 
 import Book.Ch7 exposing (..)
 import Logic exposing (..)
-
-
-
---
--- TODO:
---
--- - enumeratePluso
--- - enumerateo
---
 
 
 notPastao : Value a -> Goal a
@@ -72,3 +65,40 @@ genAndTestPluso i j k =
                     , equals k z
                     ]
             )
+
+
+enumeratePluso : Value a -> Value a -> Goal a
+enumeratePluso r n =
+    fresh3
+        (\i j k ->
+            conj
+                [ bumpo n i
+                , bumpo n j
+                , pluso i j k
+                , genAndTestPluso i j k
+                , equals (list [ i, j, k ]) r
+                ]
+        )
+
+
+enumerateo : (Value a -> Value a -> Value a -> Goal a) -> Value a -> Value a -> Goal a
+enumerateo op r n =
+    fresh3
+        (\i j k ->
+            conj
+                [ bumpo n i
+                , bumpo n j
+                , op i j k
+                , onceo <|
+                    fresh3
+                        (\x y z ->
+                            conj
+                                [ op x y z
+                                , equals i x
+                                , equals j y
+                                , equals k z
+                                ]
+                        )
+                , equals (list [ i, j, k ]) r
+                ]
+        )
