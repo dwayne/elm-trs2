@@ -1,6 +1,7 @@
 {
   "packages": {
     "elmPackages.elm": "latest",
+    "elmPackages.elm-doc-preview": "latest",
     "elmPackages.elm-format": "latest",
     "elmPackages.elm-test": "latest"
   },
