@@ -103,7 +103,7 @@ never : Goal a
 never =
     Goal
         (\state ->
-            Stream.Suspension (\_ -> apply never state)
+            Stream.Suspend (\_ -> apply never state)
         )
 
 
@@ -121,7 +121,7 @@ always : Goal a
 always =
     Goal
         (\state ->
-            Stream.Suspension (\_ -> apply (disj2 succeed always) state)
+            Stream.Suspend (\_ -> apply (disj2 succeed always) state)
         )
 
 
@@ -173,7 +173,7 @@ lazy : (() -> Goal a) -> Goal a
 lazy f =
     Goal
         (\state ->
-            Stream.Suspension
+            Stream.Suspend
                 (\_ ->
                     apply (f ()) state
                 )
@@ -268,8 +268,8 @@ ifte (Goal g1) (Goal g2) (Goal g3) =
                         Stream.Cons _ _ ->
                             Stream.appendMap g2 s
 
-                        Stream.Suspension f ->
-                            Stream.Suspension (\_ -> loop (f ()))
+                        Stream.Suspend f ->
+                            Stream.Suspend (\_ -> loop (f ()))
             in
             loop (g1 state)
         )
@@ -289,8 +289,8 @@ once (Goal g) =
                         Stream.Cons car _ ->
                             Stream.singleton car
 
-                        Stream.Suspension f ->
-                            Stream.Suspension (\_ -> loop (f ()))
+                        Stream.Suspend f ->
+                            Stream.Suspend (\_ -> loop (f ()))
             in
             loop (g state)
         )
