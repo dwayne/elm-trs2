@@ -1,25 +1,34 @@
 module Logic.Variable exposing (Variable, Id, toString)
 
-{-| Logic variables.
+{-| Variables or logic variables.
 
 @docs Variable, Id, toString
 
 -}
 
 
-{-| -}
+{-| Variables are uniquely identified by their `name` and `id`.
+
+**N.B.** _The empty string name is reserved for use internally._
+
+-}
 type alias Variable =
-    { name : String -- N.B. The emtpy string is reserved for use internally.
+    { name : String
     , id : Id
     }
 
 
-{-| -}
+{-| Any integral value can serve as an identifier.
+-}
 type alias Id =
     Int
 
 
-{-| -}
+{-| Convert to a representation that is useful for debugging purposes.
+
+    toString (Variable "x" 3) == "x.3"
+
+-}
 toString : Variable -> String
 toString { name, id } =
     name ++ "." ++ String.fromInt id
