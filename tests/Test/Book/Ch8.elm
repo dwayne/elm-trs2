@@ -318,6 +318,40 @@ suite =
               }
 
             --
+            -- repeatedMulo
+            --
+            -- q == 0
+            --
+            , { input = run (repeatedMulo numOne numZero)
+              , output = "((1))"
+              }
+            , { input = run (repeatedMulo (list [ zero, one ]) numZero)
+              , output = "((1))"
+              }
+            , { input = run (repeatedMulo (list [ one, one ]) numZero)
+              , output = "((1))"
+              }
+
+            --
+            -- q == 1
+            --
+            , { input = run (repeatedMulo numZero numOne)
+              , output = "(())"
+              }
+            , { input = run (repeatedMulo numOne numOne)
+              , output = "((1))"
+              }
+            , { input = run (repeatedMulo (list [ zero, one ]) numOne)
+              , output = "((0 1))"
+              }
+            , { input = run (repeatedMulo (list [ one, one ]) numOne)
+              , output = "((1 1))"
+              }
+            , { input = run (repeatedMulo (list [ zero, zero, one ]) numOne)
+              , output = "((0 0 1))"
+              }
+
+            --
             -- logo
             --
             , { input =
@@ -329,7 +363,7 @@ suite =
               }
 
             --
-            -- This doesn't pass.
+            -- WARNING: Correct BUT, VERY SLOW!!!
             --
             --, { input =
             --        run3AtMost 9
@@ -377,15 +411,23 @@ suite =
                     run (expo (list [ one, one ]) numOne)
               , output = "((1 1))"
               }
+            , { input =
+                    -- 3^2 = 9
+                    run (expo (list [ one, one ]) (list [ zero, one ]))
+              , output = "((1 0 0 1))"
+              }
 
             --
-            -- These don't pass.
+            -- WARNING: Correct BUT, SLOW!!!
             --
             --, { input =
-            --        -- 3^2 = 9
-            --        run (expo (list [one, one]) (list [zero, one]))
-            --  , output = "((1 0 0 1))"
+            --        -- 3^3 = 27
+            --        run (expo (list [one, one]) (list [one, one]))
+            --  , output = "((1 1 0 1 1))"
             --  }
+            --
+            -- WARNING: Correct BUT, EXTREMELY SLOW!!!
+            --
             --, { input =
             --        -- 3^5 = 243
             --        run (expo (list [one, one]) (list [one, zero, one]))

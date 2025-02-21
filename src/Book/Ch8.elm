@@ -8,6 +8,7 @@ module Book.Ch8 exposing
     , lessThano
     , logo
     , originalDivo
+    , repeatedMulo
     , splito
     , timeso
     )
@@ -647,7 +648,8 @@ repeatedMulo n q nq =
         , [ equals numOne q, equals n nq ]
 
         -- q > 1
-        , [ fresh2
+        , [ greaterThan1o q
+          , fresh2
                 (\q1 nq1 ->
                     conj
                         -- q1 + 1 = q, i.e. q1 = q - 1
