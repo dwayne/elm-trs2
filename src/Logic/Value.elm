@@ -1,8 +1,15 @@
 module Logic.Value exposing (Value(..), toString)
 
+{-| Values.
+
+@docs Value, toString
+
+-}
+
 import Logic.Variable as Variable exposing (Variable)
 
 
+{-| -}
 type Value a
     = Const a
     | Var Variable
@@ -11,6 +18,7 @@ type Value a
     | Pair (Value a) (Value a)
 
 
+{-| -}
 toString : (a -> String) -> Value a -> String
 toString =
     toStringHelper "("

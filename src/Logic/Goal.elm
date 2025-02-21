@@ -1,43 +1,22 @@
 module Logic.Goal exposing
-    ( Goal
-    , Length(..)
-    , State
-    , always
-    , callFresh
-    , conda
-    , conde
-    , condu
-    , conj
-    , conj2
-    , disj
-    , disj2
-    , equals
-    , fail
-    , fresh
-    , fresh2
-    , fresh3
-    , fresh4
-    , fresh5
-    , fresh6
-    , fresh7
-    , fresh8
-    , ifte
-    , initState
-    , lazy
-    , never
-    , once
-    , run
-    , run2
-    , run3
-    , run4
-    , run5
-    , run6
-    , run7
-    , run8
-    , runS
-    , succeed
-    , toString
+    ( Goal, succeed, fail, equals, never, disj2, always, conj2
+    , disj, conj, conde, lazy
+    , callFresh, fresh, fresh2, fresh3, fresh4, fresh5, fresh6, fresh7, fresh8
+    , ifte, once, conda, condu
+    , Length(..), runS, run, run2, run3, run4, run5, run6, run7, run8
+    , State, initState, toString
     )
+
+{-| Goals.
+
+@docs Goal, succeed, fail, equals, never, disj2, always, conj2
+@docs disj, conj, conde, lazy
+@docs callFresh, fresh, fresh2, fresh3, fresh4, fresh5, fresh6, fresh7, fresh8
+@docs ifte, once, conda, condu
+@docs Length, runS, run, run2, run3, run4, run5, run6, run7, run8
+@docs State, initState, toString
+
+-}
 
 import Logic.Stream as Stream exposing (Stream)
 import Logic.Substitution as Substitution exposing (Substitution)
@@ -71,16 +50,19 @@ import Logic.Variable exposing (Id, Variable)
 --
 
 
+{-| -}
 type Goal a
     = Goal (State a -> Stream (State a))
 
 
+{-| -}
 type alias State a =
     { substitution : Substitution a
     , nextId : Id
     }
 
 
+{-| -}
 initState : State a
 initState =
     { substitution = [], nextId = startId }
@@ -90,16 +72,19 @@ initState =
 -- RELATIONAL
 
 
+{-| -}
 succeed : Goal a
 succeed =
     Goal Stream.singleton
 
 
+{-| -}
 fail : Goal a
 fail =
     Goal (\_ -> Stream.Empty)
 
 
+{-| -}
 equals : Value a -> Value a -> Goal a
 equals u v =
     Goal
@@ -113,6 +98,7 @@ equals u v =
         )
 
 
+{-| -}
 never : Goal a
 never =
     Goal
@@ -121,6 +107,7 @@ never =
         )
 
 
+{-| -}
 disj2 : Goal a -> Goal a -> Goal a
 disj2 (Goal g1) (Goal g2) =
     Goal
@@ -129,6 +116,7 @@ disj2 (Goal g1) (Goal g2) =
         )
 
 
+{-| -}
 always : Goal a
 always =
     Goal
@@ -137,6 +125,7 @@ always =
         )
 
 
+{-| -}
 disj : List (Goal a) -> Goal a
 disj body =
     case body of
@@ -150,6 +139,7 @@ disj body =
             disj2 g (disj gs)
 
 
+{-| -}
 conj2 : Goal a -> Goal a -> Goal a
 conj2 (Goal g1) (Goal g2) =
     Goal
@@ -158,6 +148,7 @@ conj2 (Goal g1) (Goal g2) =
         )
 
 
+{-| -}
 conj : List (Goal a) -> Goal a
 conj body =
     case body of
@@ -171,11 +162,13 @@ conj body =
             conj2 g (conj gs)
 
 
+{-| -}
 conde : List (List (Goal a)) -> Goal a
 conde =
     disj << List.map conj
 
 
+{-| -}
 lazy : (() -> Goal a) -> Goal a
 lazy f =
     Goal
@@ -196,6 +189,7 @@ apply (Goal g) state =
 -- FRESH
 
 
+{-| -}
 callFresh : String -> (Value a -> Goal a) -> Goal a
 callFresh name f =
     Goal
@@ -208,41 +202,49 @@ callFresh name f =
         )
 
 
+{-| -}
 fresh : (Value a -> Goal a) -> Goal a
 fresh =
     callFresh internalName
 
 
+{-| -}
 fresh2 : (Value a -> Value a -> Goal a) -> Goal a
 fresh2 f2 =
     fresh (fresh << f2)
 
 
+{-| -}
 fresh3 : (Value a -> Value a -> Value a -> Goal a) -> Goal a
 fresh3 f3 =
     fresh (fresh2 << f3)
 
 
+{-| -}
 fresh4 : (Value a -> Value a -> Value a -> Value a -> Goal a) -> Goal a
 fresh4 f4 =
     fresh (fresh3 << f4)
 
 
+{-| -}
 fresh5 : (Value a -> Value a -> Value a -> Value a -> Value a -> Goal a) -> Goal a
 fresh5 f5 =
     fresh (fresh4 << f5)
 
 
+{-| -}
 fresh6 : (Value a -> Value a -> Value a -> Value a -> Value a -> Value a -> Goal a) -> Goal a
 fresh6 f6 =
     fresh (fresh5 << f6)
 
 
+{-| -}
 fresh7 : (Value a -> Value a -> Value a -> Value a -> Value a -> Value a -> Value a -> Goal a) -> Goal a
 fresh7 f7 =
     fresh (fresh6 << f7)
 
 
+{-| -}
 fresh8 : (Value a -> Value a -> Value a -> Value a -> Value a -> Value a -> Value a -> Value a -> Goal a) -> Goal a
 fresh8 f8 =
     fresh (fresh7 << f8)
@@ -252,6 +254,7 @@ fresh8 f8 =
 -- NON-RELATIONAL
 
 
+{-| -}
 ifte : Goal a -> Goal a -> Goal a -> Goal a
 ifte (Goal g1) (Goal g2) (Goal g3) =
     Goal
@@ -272,6 +275,7 @@ ifte (Goal g1) (Goal g2) (Goal g3) =
         )
 
 
+{-| -}
 once : Goal a -> Goal a
 once (Goal g) =
     Goal
@@ -292,6 +296,7 @@ once (Goal g) =
         )
 
 
+{-| -}
 conda : List (List (Goal a)) -> Goal a
 conda arms =
     case arms of
@@ -305,6 +310,7 @@ conda arms =
             fail
 
 
+{-| -}
 condu : List (List (Goal a)) -> Goal a
 condu arms =
     let
@@ -344,11 +350,13 @@ condu arms =
 -- RUN
 
 
+{-| -}
 type Length
     = AtMost Int
     | Unbounded
 
 
+{-| -}
 runS : Length -> Goal a -> List (Substitution a)
 runS length (Goal g) =
     let
@@ -366,12 +374,14 @@ runS length (Goal g) =
         |> List.map .substitution
 
 
+{-| -}
 run : Length -> (Value a -> Goal a) -> List (Value a)
 run length f =
     runS length (f q)
         |> List.map (Substitution.reify q)
 
 
+{-| -}
 run2 : Length -> (Value a -> Value a -> Goal a) -> List (Value a)
 run2 length f2 =
     let
@@ -382,6 +392,7 @@ run2 length f2 =
         |> List.map (Substitution.reify q)
 
 
+{-| -}
 run3 : Length -> (Value a -> Value a -> Value a -> Goal a) -> List (Value a)
 run3 length f3 =
     let
@@ -392,6 +403,7 @@ run3 length f3 =
         |> List.map (Substitution.reify q)
 
 
+{-| -}
 run4 : Length -> (Value a -> Value a -> Value a -> Value a -> Goal a) -> List (Value a)
 run4 length f4 =
     let
@@ -402,6 +414,7 @@ run4 length f4 =
         |> List.map (Substitution.reify q)
 
 
+{-| -}
 run5 : Length -> (Value a -> Value a -> Value a -> Value a -> Value a -> Goal a) -> List (Value a)
 run5 length f5 =
     let
@@ -412,6 +425,7 @@ run5 length f5 =
         |> List.map (Substitution.reify q)
 
 
+{-| -}
 run6 : Length -> (Value a -> Value a -> Value a -> Value a -> Value a -> Value a -> Goal a) -> List (Value a)
 run6 length f6 =
     let
@@ -422,6 +436,7 @@ run6 length f6 =
         |> List.map (Substitution.reify q)
 
 
+{-| -}
 run7 : Length -> (Value a -> Value a -> Value a -> Value a -> Value a -> Value a -> Value a -> Goal a) -> List (Value a)
 run7 length f7 =
     let
@@ -432,6 +447,7 @@ run7 length f7 =
         |> List.map (Substitution.reify q)
 
 
+{-| -}
 run8 : Length -> (Value a -> Value a -> Value a -> Value a -> Value a -> Value a -> Value a -> Value a -> Goal a) -> List (Value a)
 run8 length f8 =
     let
@@ -446,6 +462,7 @@ run8 length f8 =
 -- CONVERT
 
 
+{-| -}
 toString : (a -> String) -> List (Value a) -> String
 toString stringify vs =
     "(" ++ String.join " " (List.map (Value.toString stringify) vs) ++ ")"

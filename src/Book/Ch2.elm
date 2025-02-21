@@ -1,18 +1,23 @@
 module Book.Ch2 exposing
-    ( caro
-    , caroUsingConso
-    , cdro
-    , cdroUsingConso
-    , conso
-    , consoUsingEquals
-    , nullo
-    , pairo
-    , singletono
+    ( caro, cdro
+    , conso, consoUsingEquals
+    , nullo, pairo, singletono
+    , caroUsingConso, cdroUsingConso
     )
+
+{-| Relations from Chapter 2 of The Reasoned Schemer (2nd Edition).
+
+@docs caro, cdro
+@docs conso, consoUsingEquals
+@docs nullo, pairo, singletono
+@docs caroUsingConso, cdroUsingConso
+
+-}
 
 import Logic exposing (..)
 
 
+{-| -}
 caro : Value a -> Value a -> Goal a
 caro p a =
     fresh
@@ -21,6 +26,7 @@ caro p a =
         )
 
 
+{-| -}
 cdro : Value a -> Value a -> Goal a
 cdro p d =
     fresh
@@ -29,6 +35,7 @@ cdro p d =
         )
 
 
+{-| -}
 conso : Value a -> Value a -> Value a -> Goal a
 conso a d p =
     conj
@@ -37,16 +44,19 @@ conso a d p =
         ]
 
 
+{-| -}
 consoUsingEquals : Value a -> Value a -> Value a -> Goal a
 consoUsingEquals a d p =
     equals (cons a d) p
 
 
+{-| -}
 nullo : Value a -> Goal a
 nullo x =
     equals null x
 
 
+{-| -}
 pairo : Value a -> Goal a
 pairo p =
     fresh2
@@ -67,6 +77,7 @@ pairo p =
 --        )
 
 
+{-| -}
 singletono : Value a -> Goal a
 singletono l =
     --
@@ -82,6 +93,7 @@ singletono l =
 --
 
 
+{-| -}
 caroUsingConso : Value a -> Value a -> Goal a
 caroUsingConso p a =
     fresh
@@ -90,6 +102,7 @@ caroUsingConso p a =
         )
 
 
+{-| -}
 cdroUsingConso : Value a -> Value a -> Goal a
 cdroUsingConso p d =
     fresh

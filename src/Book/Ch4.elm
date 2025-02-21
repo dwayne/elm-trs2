@@ -1,8 +1,10 @@
-module Book.Ch4 exposing
-    ( appendo
-    , swappendo
-    , unwrapo
-    )
+module Book.Ch4 exposing (appendo, swappendo, unwrapo)
+
+{-| Relations from Chapter 4 of The Reasoned Schemer (2nd Edition).
+
+@docs appendo, swappendo, unwrapo
+
+-}
 
 import Book.Ch2 exposing (..)
 import Logic exposing (..)
@@ -25,6 +27,7 @@ import Logic exposing (..)
 --        ]
 
 
+{-| -}
 appendo : Value a -> Value a -> Value a -> Goal a
 appendo l t out =
     --
@@ -48,6 +51,7 @@ appendo l t out =
         ]
 
 
+{-| -}
 swappendo : Value a -> Value a -> Value a -> Goal a
 swappendo l t out =
     conde
@@ -64,6 +68,7 @@ swappendo l t out =
         ]
 
 
+{-| -}
 unwrapo : Value a -> Value a -> Goal a
 unwrapo x out =
     conde

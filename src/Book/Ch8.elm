@@ -1,23 +1,31 @@
 module Book.Ch8 exposing
-    ( divo
-    , equalLo
-    , expo
-    , lessThanLo
-    , lessThanOrEqualLo
-    , lessThanOrEqualo
-    , lessThano
-    , logo
+    ( timeso
+    , equalLo, lessThanLo, lessThanOrEqualLo
+    , lessThano, lessThanOrEqualo
     , originalDivo
-    , repeatedMulo
-    , splito
-    , timeso
+    , splito, divo
+    , logo, repeatedMulo
+    , expo
     )
+
+{-| Relations from Chapter 8 of The Reasoned Schemer (2nd Edition).
+
+@docs timeso
+@docs equalLo, lessThanLo, lessThanOrEqualLo
+@docs lessThano, lessThanOrEqualo
+@docs originalDivo
+@docs splito, divo
+@docs logo, repeatedMulo
+@docs expo
+
+-}
 
 import Book.Ch4 exposing (..)
 import Book.Ch7 exposing (..)
 import Logic exposing (..)
 
 
+{-| -}
 timeso : Value a -> Value a -> Value a -> Goal a
 timeso n m p =
     --
@@ -176,6 +184,11 @@ boundTimeso q p n m =
         ]
 
 
+
+-- COMPARISON
+
+
+{-| -}
 equalLo : Value a -> Value a -> Goal a
 equalLo n m =
     conde
@@ -202,6 +215,7 @@ equalLo n m =
         ]
 
 
+{-| -}
 lessThanLo : Value a -> Value a -> Goal a
 lessThanLo n m =
     --
@@ -231,6 +245,7 @@ lessThanLo n m =
         ]
 
 
+{-| -}
 lessThanOrEqualLo : Value a -> Value a -> Goal a
 lessThanOrEqualLo n m =
     --
@@ -253,6 +268,7 @@ lessThanOrEqualLo n m =
         (lessThanLo n m)
 
 
+{-| -}
 lessThano : Value a -> Value a -> Goal a
 lessThano n m =
     --
@@ -277,6 +293,7 @@ lessThano n m =
         ]
 
 
+{-| -}
 lessThanOrEqualo : Value a -> Value a -> Goal a
 lessThanOrEqualo n m =
     disj2
@@ -284,6 +301,11 @@ lessThanOrEqualo n m =
         (lessThano n m)
 
 
+
+-- DIVISION
+
+
+{-| -}
 originalDivo : Value a -> Value a -> Value a -> Value a -> Goal a
 originalDivo n m q r =
     --
@@ -326,6 +348,7 @@ originalDivo n m q r =
         ]
 
 
+{-| -}
 splito : Value a -> Value a -> Value a -> Value a -> Goal a
 splito n r l h =
     --
@@ -406,6 +429,7 @@ splito n r l h =
         ]
 
 
+{-| -}
 divo : Value a -> Value a -> Value a -> Value a -> Goal a
 divo n m q r =
     --
@@ -465,6 +489,11 @@ nWiderThanMo n m q r =
         )
 
 
+
+-- LOGARITHM
+
+
+{-| -}
 logo : Value a -> Value a -> Value a -> Value a -> Goal a
 logo n b q r =
     --
@@ -631,6 +660,7 @@ baseThreeOrMoreo n b q r =
         )
 
 
+{-| -}
 repeatedMulo : Value a -> Value a -> Value a -> Goal a
 repeatedMulo n q nq =
     --
@@ -667,6 +697,11 @@ repeatedMulo n q nq =
         ]
 
 
+
+-- EXPONENTIATION
+
+
+{-| -}
 expo : Value a -> Value a -> Value a -> Goal a
 expo b q n =
     logo n b q numZero

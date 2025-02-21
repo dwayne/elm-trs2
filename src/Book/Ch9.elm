@@ -1,17 +1,22 @@
 module Book.Ch9 exposing
-    ( bumpo
-    , enumeratePluso
-    , enumerateo
-    , genAndTestPluso
-    , notPastao
+    ( notPastao, pasta
     , onceo
-    , pasta
+    , bumpo, genAndTestPluso, enumeratePluso, enumerateo
     )
+
+{-| Relations from Chapter 9 of The Reasoned Schemer (2nd Edition).
+
+@docs notPastao, pasta
+@docs onceo
+@docs bumpo, genAndTestPluso, enumeratePluso, enumerateo
+
+-}
 
 import Book.Ch7 exposing (..)
 import Logic exposing (..)
 
 
+{-| -}
 notPastao : Value a -> Goal a
 notPastao x =
     conda
@@ -20,11 +25,13 @@ notPastao x =
         ]
 
 
+{-| -}
 pasta : Value a
 pasta =
     string "pasta"
 
 
+{-| -}
 onceo : Goal a -> Goal a
 onceo g =
     --
@@ -39,6 +46,7 @@ onceo g =
         ]
 
 
+{-| -}
 bumpo : Value a -> Value a -> Goal a
 bumpo n x =
     disj2
@@ -53,6 +61,7 @@ bumpo n x =
         )
 
 
+{-| -}
 genAndTestPluso : Value a -> Value a -> Value a -> Goal a
 genAndTestPluso i j k =
     onceo <|
@@ -67,6 +76,7 @@ genAndTestPluso i j k =
             )
 
 
+{-| -}
 enumeratePluso : Value a -> Value a -> Goal a
 enumeratePluso r n =
     fresh3
@@ -81,6 +91,7 @@ enumeratePluso r n =
         )
 
 
+{-| -}
 enumerateo : (Value a -> Value a -> Value a -> Goal a) -> Value a -> Value a -> Goal a
 enumerateo op r n =
     fresh3

@@ -1,10 +1,10 @@
 # The Reasoned Schemer (2nd Edition) in Elm
 
-[The Reasoned Schemer](https://mitpressbookstore.mit.edu/book/9780262535519) is a book by [Daniel P. Friedman](https://en.wikipedia.org/wiki/Daniel_P._Friedman), [William E. Byrd](http://webyrd.net/), [Oleg Kiselyov](https://okmij.org/ftp/), and [Jason Hemann](https://scholar.google.com/citations?user=SePR8OkAAAAJ&hl=en).
+[The Reasoned Schemer](https://mitpress.mit.edu/9780262535519/the-reasoned-schemer/) is a book by [Daniel P. Friedman](https://en.wikipedia.org/wiki/Daniel_P._Friedman), [William E. Byrd](http://webyrd.net/), [Oleg Kiselyov](https://okmij.org/ftp/), and [Jason Hemann](https://scholar.google.com/citations?user=SePR8OkAAAAJ&hl=en) that shows the beauty and elegance of relational programming, which captures the essence of logic programming.
 
-The main purpose of the book is to show the beauty and elegance of relational programming. Relational programming, as presented in the book, captures the essence of logic programming. The book shows how to implement a relational programming language in Scheme, or in any other functional programming language.
+This package shows how to implement and embed the relational programming language, as presented in the book, using Elm.
 
-This repository shows how to implement and embed the relational programming language, as presented in the book, using Elm. The implementation has been extensively tested to ensure its correctness.
+**N.B.** *The implementation has been extensively tested to ensure its correctness.*
 
 ## Examples
 

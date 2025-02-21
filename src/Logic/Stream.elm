@@ -1,13 +1,13 @@
-module Logic.Stream exposing
-    ( Stream(..)
-    , append
-    , appendMap
-    , singleton
-    , take
-    , toList
-    )
+module Logic.Stream exposing (Stream(..), singleton, append, appendMap, take, toList)
+
+{-| Streams.
+
+@docs Stream, singleton, append, appendMap, take, toList
+
+-}
 
 
+{-| -}
 type Stream a
     = Empty
     | Cons a (Stream a)
@@ -18,6 +18,7 @@ type Stream a
 -- CREATE
 
 
+{-| -}
 singleton : a -> Stream a
 singleton x =
     Cons x Empty
@@ -27,6 +28,7 @@ singleton x =
 -- COMBINE
 
 
+{-| -}
 append : Stream a -> Stream a -> Stream a
 append s t =
     case s of
@@ -40,6 +42,7 @@ append s t =
             Suspension (\_ -> append t (f ()))
 
 
+{-| -}
 appendMap : (a -> Stream b) -> Stream a -> Stream b
 appendMap g s =
     case s of
@@ -59,6 +62,7 @@ appendMap g s =
 -- CONVERT
 
 
+{-| -}
 take : Int -> Stream a -> List a
 take n s =
     if n > 0 then
@@ -76,6 +80,7 @@ take n s =
         []
 
 
+{-| -}
 toList : Stream a -> List a
 toList s =
     case s of

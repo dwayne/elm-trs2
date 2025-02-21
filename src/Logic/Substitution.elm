@@ -1,19 +1,20 @@
 module Logic.Substitution exposing
-    ( Substitution
-    , extend
-    , occurs
-    , reifiedNameSubstitution
-    , reify
-    , toString
-    , unify
-    , walk
-    , walkAll
+    ( Substitution, walk, occurs, extend, unify
+    , walkAll, reifiedNameSubstitution, reify, toString
     )
+
+{-| Substitutions.
+
+@docs Substitution, walk, occurs, extend, unify
+@docs walkAll, reifiedNameSubstitution, reify, toString
+
+-}
 
 import Logic.Value as Value exposing (Value(..))
 import Logic.Variable as Variable exposing (Variable)
 
 
+{-| -}
 type alias Substitution a =
     List ( Variable, Value a )
 
@@ -22,6 +23,7 @@ type alias Substitution a =
 -- UNIFICATION
 
 
+{-| -}
 walk : Value a -> Substitution a -> Value a
 walk val sub =
     case val of
@@ -37,6 +39,7 @@ walk val sub =
             val
 
 
+{-| -}
 occurs : Variable -> Value a -> Substitution a -> Bool
 occurs x val sub =
     case walk val sub of
@@ -50,6 +53,7 @@ occurs x val sub =
             False
 
 
+{-| -}
 extend : Variable -> Value a -> Substitution a -> Maybe (Substitution a)
 extend var val sub =
     if occurs var val sub then
@@ -60,6 +64,7 @@ extend var val sub =
         Just (( var, val ) :: sub)
 
 
+{-| -}
 unify : Value a -> Value a -> Substitution a -> Maybe (Substitution a)
 unify u v sub =
     let
@@ -95,6 +100,7 @@ unify u v sub =
 -- REIFICATION
 
 
+{-| -}
 walkAll : Value a -> Substitution a -> Value a
 walkAll val sub =
     let
@@ -111,6 +117,7 @@ walkAll val sub =
             walkedVal
 
 
+{-| -}
 reifiedNameSubstitution : Value a -> Substitution a
 reifiedNameSubstitution val =
     reifiedNameSubstitutionHelper val []
@@ -142,6 +149,7 @@ reifiedNameSubstitutionHelper val rnSub =
             rnSub
 
 
+{-| -}
 reify : Value a -> Substitution a -> Value a
 reify v sub =
     let
@@ -158,6 +166,7 @@ reify v sub =
 -- CONVERT
 
 
+{-| -}
 toString : (a -> String) -> Substitution a -> String
 toString stringify sub =
     String.concat

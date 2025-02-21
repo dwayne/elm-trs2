@@ -1,15 +1,16 @@
-module Book.Ch3 exposing
-    ( listo
-    , lolo
-    , loso
-    , membero
-    , properMembero
-    )
+module Book.Ch3 exposing (listo, lolo, loso, membero, properMembero)
+
+{-| Relations from Chapter 3 of The Reasoned Schemer (2nd Edition).
+
+@docs listo, lolo, loso, membero, properMembero
+
+-}
 
 import Book.Ch2 exposing (..)
 import Logic exposing (..)
 
 
+{-| -}
 listo : Value a -> Goal a
 listo l =
     conde
@@ -25,6 +26,7 @@ listo l =
         ]
 
 
+{-| -}
 lolo : Value a -> Goal a
 lolo l =
     conde
@@ -47,6 +49,7 @@ lolo l =
         ]
 
 
+{-| -}
 loso : Value a -> Goal a
 loso l =
     conde
@@ -69,6 +72,7 @@ loso l =
         ]
 
 
+{-| -}
 membero : Value a -> Value a -> Goal a
 membero x l =
     conde
@@ -84,6 +88,7 @@ membero x l =
         ]
 
 
+{-| -}
 properMembero : Value a -> Value a -> Goal a
 properMembero x l =
     conde

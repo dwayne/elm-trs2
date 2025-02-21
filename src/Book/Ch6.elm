@@ -1,12 +1,15 @@
-module Book.Ch6 exposing
-    ( alwayso
-    , nevero
-    , veryRecursiveo
-    )
+module Book.Ch6 exposing (alwayso, nevero, veryRecursiveo)
+
+{-| Relations from Chapter 6 of The Reasoned Schemer (2nd Edition).
+
+@docs alwayso, nevero, veryRecursiveo
+
+-}
 
 import Logic exposing (..)
 
 
+{-| -}
 alwayso : Goal a
 alwayso =
     --
@@ -21,6 +24,7 @@ alwayso =
         ]
 
 
+{-| -}
 nevero : Goal a
 nevero =
     --
@@ -32,6 +36,7 @@ nevero =
     lazy (\_ -> nevero)
 
 
+{-| -}
 veryRecursiveo : Goal a
 veryRecursiveo =
     conde

@@ -1,21 +1,22 @@
 module Book.Ch7 exposing
-    ( addero
-    , bitAndo
-    , bitXoro
-    , buildNum
-    , fullAddero
-    , genAddero
-    , greaterThan1o
-    , halfAddero
+    ( zero, one
+    , bitXoro, bitAndo, halfAddero, fullAddero
+    , buildNum, numZero, numOne
+    , poso, greaterThan1o
+    , addero, genAddero, pluso, minuso
     , lengtho
-    , minuso
-    , numOne
-    , numZero
-    , one
-    , pluso
-    , poso
-    , zero
     )
+
+{-| Relations from Chapter 7 of The Reasoned Schemer (2nd Edition).
+
+@docs zero, one
+@docs bitXoro, bitAndo, halfAddero, fullAddero
+@docs buildNum, numZero, numOne
+@docs poso, greaterThan1o
+@docs addero, genAddero, pluso, minuso
+@docs lengtho
+
+-}
 
 import Bitwise
 import Book.Ch2 exposing (..)
@@ -28,16 +29,19 @@ import Logic exposing (..)
 --
 
 
+{-| -}
 zero : Value a
 zero =
     int 0
 
 
+{-| -}
 one : Value a
 one =
     int 1
 
 
+{-| -}
 bitXoro : Value a -> Value a -> Value a -> Goal a
 bitXoro x y r =
     conde
@@ -48,6 +52,7 @@ bitXoro x y r =
         ]
 
 
+{-| -}
 bitAndo : Value a -> Value a -> Value a -> Goal a
 bitAndo x y r =
     conde
@@ -58,6 +63,7 @@ bitAndo x y r =
         ]
 
 
+{-| -}
 halfAddero : Value a -> Value a -> Value a -> Value a -> Goal a
 halfAddero x y r c =
     --
@@ -69,6 +75,7 @@ halfAddero x y r c =
         ]
 
 
+{-| -}
 fullAddero : Value a -> Value a -> Value a -> Value a -> Value a -> Goal a
 fullAddero b x y r c =
     --
@@ -84,6 +91,7 @@ fullAddero b x y r c =
         )
 
 
+{-| -}
 buildNum : Int -> Value a
 buildNum =
     --
@@ -142,16 +150,19 @@ isOdd =
     not << isEven
 
 
+{-| -}
 numZero : Value a
 numZero =
     null
 
 
+{-| -}
 numOne : Value a
 numOne =
     list [ one ]
 
 
+{-| -}
 poso : Value a -> Goal a
 poso n =
     fresh2
@@ -160,6 +171,7 @@ poso n =
         )
 
 
+{-| -}
 greaterThan1o : Value a -> Goal a
 greaterThan1o n =
     fresh3
@@ -168,6 +180,7 @@ greaterThan1o n =
         )
 
 
+{-| -}
 addero : Value a -> Value a -> Value a -> Value a -> Goal a
 addero b n m r =
     --
@@ -242,6 +255,7 @@ addero b n m r =
         ]
 
 
+{-| -}
 genAddero : Value a -> Value a -> Value a -> Value a -> Goal a
 genAddero b n m r =
     --
@@ -296,11 +310,13 @@ genAddero b n m r =
         )
 
 
+{-| -}
 pluso : Value a -> Value a -> Value a -> Goal a
 pluso =
     addero zero
 
 
+{-| -}
 minuso : Value a -> Value a -> Value a -> Goal a
 minuso n m k =
     --
@@ -310,6 +326,7 @@ minuso n m k =
     pluso m k n
 
 
+{-| -}
 lengtho : Value a -> Value a -> Goal a
 lengtho l n =
     conde

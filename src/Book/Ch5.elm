@@ -1,12 +1,16 @@
-module Book.Ch5 exposing
-    ( memo
-    , rembero
-    )
+module Book.Ch5 exposing (memo, rembero)
+
+{-| Relations from Chapter 5 of The Reasoned Schemer (2nd Edition).
+
+@docs memo, rembero
+
+-}
 
 import Book.Ch2 exposing (..)
 import Logic exposing (..)
 
 
+{-| -}
 memo : Value a -> Value a -> Value a -> Goal a
 memo x l out =
     conde
@@ -22,6 +26,7 @@ memo x l out =
         ]
 
 
+{-| -}
 rembero : Value a -> Value a -> Value a -> Goal a
 rembero x l out =
     conde

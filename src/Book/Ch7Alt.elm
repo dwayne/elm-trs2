@@ -1,9 +1,14 @@
 module Book.Ch7Alt exposing
-    ( bitAndo
-    , bitXoro
-    , one
-    , zero
+    ( zero, one
+    , bitXoro, bitAndo
     )
+
+{-| Relations from Chapter 7 of The Reasoned Schemer (2nd Edition).
+
+@docs zero, one
+@docs bitXoro, bitAndo
+
+-}
 
 import Logic exposing (..)
 
@@ -14,16 +19,30 @@ import Logic exposing (..)
 --
 
 
+{-| -}
 zero : Value a
 zero =
     int 0
 
 
+{-| -}
 one : Value a
 one =
     int 1
 
 
+{-| -}
+bitNando : Value a -> Value a -> Value a -> Goal a
+bitNando x y r =
+    conde
+        [ [ equals zero x, equals zero y, equals one r ]
+        , [ equals zero x, equals one y, equals one r ]
+        , [ equals one x, equals zero y, equals one r ]
+        , [ equals one x, equals one y, equals zero r ]
+        ]
+
+
+{-| -}
 bitXoro : Value a -> Value a -> Value a -> Goal a
 bitXoro x y r =
     fresh3
@@ -37,16 +56,13 @@ bitXoro x y r =
         )
 
 
-bitNando : Value a -> Value a -> Value a -> Goal a
-bitNando x y r =
-    conde
-        [ [ equals zero x, equals zero y, equals one r ]
-        , [ equals zero x, equals one y, equals one r ]
-        , [ equals one x, equals zero y, equals one r ]
-        , [ equals one x, equals one y, equals zero r ]
-        ]
+{-| -}
+bitNoto : Value a -> Value a -> Goal a
+bitNoto x r =
+    bitNando x x r
 
 
+{-| -}
 bitAndo : Value a -> Value a -> Value a -> Goal a
 bitAndo x y r =
     fresh
@@ -56,8 +72,3 @@ bitAndo x y r =
                 , bitNoto s r
                 ]
         )
-
-
-bitNoto : Value a -> Value a -> Goal a
-bitNoto x r =
-    bitNando x x r
