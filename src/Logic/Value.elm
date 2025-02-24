@@ -40,11 +40,17 @@ type Value a
         ReifiedVar 9
 
     toString identity tea == "tea"
+
     toString identity u == "u.0"
+
     toString identity r == "_9"
+
     toString identity Null == "()"
+
     toString identity (Pair tea u) == "(tea . u.0)"
+
     toString identity (Pair tea (Pair u (Pair r Null))) == "(tea u.0 _9)"
+
     toString identity (Pair (Pair tea u) (Pair r Null)) == "((tea . u.0) _9)"
 
 -}
