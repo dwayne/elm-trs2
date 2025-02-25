@@ -10,6 +10,10 @@
     "PATH": "$PWD/bin:$PATH"
   },
   "shell": {
-    "init_hook": [". .bashrc"]
+    "init_hook": [
+      "alias f='elm-format src/ tests/ --yes'",
+      "alias p='elm-doc-preview --port 8001'",
+      "alias t='elm-test'"
+    ]
   }
 }

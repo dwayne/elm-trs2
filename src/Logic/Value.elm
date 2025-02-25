@@ -1,6 +1,6 @@
 module Logic.Value exposing (Value(..), toString)
 
-{-| Represents all the values that can be associated with variables.
+{-| Represents all the values (or terms) that can be associated with (logic) variables.
 
 @docs Value, toString
 
@@ -23,8 +23,8 @@ The constant type can be as rich as you need it to be.
 -}
 type Value a
     = Const a
-    | Var Variable
-    | ReifiedVar Int
+    | Var Variable -- A logic variable
+    | ReifiedVar Int -- A reified variable
     | Null
     | Pair (Value a) (Value a)
 
