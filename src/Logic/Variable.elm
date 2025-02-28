@@ -1,8 +1,16 @@
-module Logic.Variable exposing (Variable, Id, toString)
+module Logic.Variable exposing
+    ( Variable, Id
+    , toString
+    )
 
 {-| Variables or logic variables.
 
-@docs Variable, Id, toString
+@docs Variable, Id
+
+
+# Debug
+
+@docs toString
 
 -}
 
@@ -24,7 +32,7 @@ type alias Id =
     Int
 
 
-{-| Convert to a representation that is useful for debugging purposes.
+{-| Convert to a representation that's useful for debugging and testing.
 
     toString (Variable "x" 3) == "x.3"
 

@@ -57,7 +57,7 @@ in place of [Prolog's cut](https://en.wikipedia.org/wiki/Cut_%28logic_programmin
 @docs Length, runS, run, run2, run3, run4, run5, run6, run7, run8
 
 
-# Convert
+# Debug
 
 @docs toString
 
@@ -259,6 +259,10 @@ never =
         (\state ->
             Stream.Suspend (\_ -> apply never state)
         )
+
+
+
+-- DEFINE
 
 
 {-| Useful for defining recursive goals.
@@ -668,10 +672,10 @@ run8 length f8 =
 
 
 
--- CONVERT
+-- DEBUG
 
 
-{-| Convert a list of values to a representation that is useful for debugging and testing.
+{-| Convert a list of values to a representation that's useful for debugging and testing.
 -}
 toString : (a -> String) -> List (Value a) -> String
 toString stringify vs =

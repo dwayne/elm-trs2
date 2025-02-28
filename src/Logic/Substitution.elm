@@ -85,7 +85,7 @@ Reification is the process of removing all logic variables from a value.
 @docs walkAll, reifiedNameSubstitution, reify
 
 
-# Convert
+# Debug
 
 @docs toString
 
@@ -400,10 +400,10 @@ reify v sub =
 
 
 
--- CONVERT
+-- DEBUG
 
 
-{-| Convert to a representation that is useful for debugging and testing.
+{-| Convert to a representation that's useful for debugging and testing.
 
     toString identity [] == "()"
 

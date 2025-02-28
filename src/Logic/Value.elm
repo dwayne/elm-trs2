@@ -1,8 +1,16 @@
-module Logic.Value exposing (Value(..), toString)
+module Logic.Value exposing
+    ( Value(..)
+    , toString
+    )
 
 {-| Represents all the values (or terms) that can be associated with (logic) variables.
 
-@docs Value, toString
+@docs Value
+
+
+# Debug
+
+@docs toString
 
 -}
 
@@ -29,7 +37,7 @@ type Value a
     | Pair (Value a) (Value a)
 
 
-{-| Convert to a representation that is useful for debugging and testing.
+{-| Convert to a representation that's useful for debugging and testing.
 
     u : ValueS
     u =
