@@ -1,20 +1,96 @@
 # The Reasoned Schemer (2nd Edition) in Elm
 
-[The Reasoned Schemer](https://mitpress.mit.edu/9780262535519/the-reasoned-schemer/) is a book by [Daniel P. Friedman](https://en.wikipedia.org/wiki/Daniel_P._Friedman), [William E. Byrd](http://webyrd.net/), [Oleg Kiselyov](https://okmij.org/ftp/), and [Jason Hemann](https://scholar.google.com/citations?user=SePR8OkAAAAJ&hl=en) that shows the beauty and elegance of relational programming, which captures the essence of logic programming.
+[The Reasoned Schemer (2nd Edition)](https://mitpress.mit.edu/9780262535519/the-reasoned-schemer/) is a book by [Daniel P. Friedman](https://en.wikipedia.org/wiki/Daniel_P._Friedman), [William E. Byrd](http://webyrd.net/), [Oleg Kiselyov](https://okmij.org/ftp/), and [Jason Hemann](https://scholar.google.com/citations?user=SePR8OkAAAAJ&hl=en) that shows the beauty and elegance of relational programming. Relational programming, as presented in the book, captures the essence of logic programming.
 
-This package shows how to implement and embed the relational programming language, as presented in the book, using Elm.
+This package shows how to implement and embed their relational programming language, [miniKanren](https://minikanren.org/), using Elm.
 
-**N.B.** *The implementation has been extensively tested to ensure its correctness.*
+## An example
 
-## Examples
+William E. Byrd has decribed `appendo` as the "Hello, World!" of the relational programming. ([video](https://youtu.be/AdKXXN5-ApQ?t=1079))
 
-WIP
+So, here it is:
+
+```elm
+import Logic exposing (..)
+
+
+appendo : Value a -> Value a -> Value a -> Goal a
+appendo l t out =
+    conde
+        [ [ nullo l, equals t out ]
+        , [ fresh3
+                (\a d res ->
+                    conj
+                        [ conso a d l
+                        , conso a res out
+                        , lazy (\_ -> appendo d t res)
+                        ]
+                )
+          ]
+        ]
+
+
+nullo : Value a -> Goal a
+nullo x =
+    equals null x
+
+
+conso : Value a -> Value a -> Value a -> Goal a
+conso a d p =
+    conj
+        [ caro p a
+        , cdro p d
+        ]
+
+
+caro : Value a -> Value a -> Goal a
+caro p a =
+    fresh
+        (\d ->
+            equals (cons a d) p
+        )
+
+
+cdro : Value a -> Value a -> Goal a
+cdro p d =
+    fresh
+        (\a ->
+            equals (cons a d) p
+        )
+```
+
+And, this is how it works:
+
+```elm
+let
+    actual =
+        toString <| run3AtMost 6 appendo
+
+    expected =
+        String.join " "
+            [ "((() _0 _0)"
+            , "((_0) _1 (_0 . _1))"
+            , "((_0 _1) _2 (_0 _1 . _2))"
+            , "((_0 _1 _2) _3 (_0 _1 _2 . _3))"
+            , "((_0 _1 _2 _3) _4 (_0 _1 _2 _3 . _4))"
+            , "((_0 _1 _2 _3 _4) _5 (_0 _1 _2 _3 _4 . _5)))"
+            ]
+in
+actual == expected
+-- True : Bool
+```
+
+For many more examples check out the source code for the `Book.*` modules as well as the extensive suite of tests.
 
 ## Public API
 
-The public API is exposed by the `Logic` module.
+The public API is exposed via the `Logic` module.
+
+**N.B.** _This section only presents a very high-level overview. Please see the documentation for more details._
 
 ### Value
+
+The values (or terms) that can be associated with (logic) variables.
 
 ```elm
 type Value a
@@ -22,7 +98,7 @@ type Value a
 
 #### Ways to construct values
 
-**Constants**
+Constants:
 
 ```elm
 int
@@ -33,7 +109,7 @@ string
 custom
 ```
 
-**Pairs, lists, and dotted lists**
+Pairs, lists, and dotted lists:
 
 ```elm
 null       -- '()
@@ -68,16 +144,25 @@ uncons
 
 ### Goal
 
+Goals (or relations) are functions which more or less take a substitution and, if it returns, produces a stream of substitutions.
+
 ```elm
 type Goal a
 ```
 
-#### Relational operators
+#### Base goals
 
 ```elm
 succeed -- #s
 fail    -- #u
 
+always
+never
+```
+
+#### Relational operators
+
+```elm
 equals  -- ≡
 
 disj2
@@ -87,12 +172,17 @@ conj2
 conj
 
 conde
+```
 
-always
-never
+#### Define recursive goals
 
+```elm
 lazy
+```
 
+#### Introduce lexically-scoped logic variables
+
+```elm
 fresh
 fresh2
 fresh3
@@ -106,6 +196,7 @@ fresh8
 #### Non-relational operators
 
 ```elm
+once
 conda
 condu
 ```
@@ -143,104 +234,39 @@ toString : List (Value String) -> String
 #### Custom
 
 ```elm
-customToString : Presenter a -> List (Value a) -> String
-
 type Presenter a
     = Default (a -> String)
     | Alternative (Constant a -> String)
+
+customToString : Presenter a -> List (Value a) -> String
 ```
 
 ## Implementation details
 
-WIP
+The `Logic.*` modules provide the low-level API upon which the `Logic` module is built. It is based on my understanding of "Chapter 10: Under the Hood" and "Connecting the Wires" from the book.
 
-### About `lazy`
+If you carefully read the source code of the modules from top to bottom in the following order:
 
-- Recall `defrel` and how you were lead to `lazy`
+- `Logic.Variable`
+- `Logic.Value`
+- `Logic.Stream`
+- `Logic.Substitution`
+- `Logic.Goal`
 
-WIP
+You should get a good sense of how it all works.
 
-### Alternative API for `fresh`
+## Development
 
-Should the API for `fresh` be:
+Enter the development environment using:
 
-```elm
-fresh : (Value a -> Goal a) -> Goal a
+```bash
+devbox shell
 ```
 
-which it currently is, or:
+Aliases are provided for running common tasks:
 
-```elm
-fresh : (Value a -> List (Goal a)) -> Goal a
+```bash
+f # Format Elm code
+p # Preview docs
+t # Run tests
 ```
-
-#### Before
-
-```elm
-fresh
-    (\x ->
-        conj
-            [ a
-            , b
-            , c
-            ]
-    )
-```
-
-#### Change API
-
-```elm
-callFresh : String -> (Value a -> List (Goal a)) -> Goal a
-callFresh name f =
-    Goal
-        (\state ->
-            let
-                var =
-                    Var (Variable name state.nextId)
-            in
-            apply (conj (f var)) { state | nextId = state.nextId + 1 }
-        )
-
-fresh : (Value a -> List (Goal a)) -> Goal a
-fresh =
-    callFresh internalName
-```
-
-#### After
-
-```elm
-fresh
-    (\x ->
-        [ a
-        , b
-        , c
-        ]
-    )
-```
-
-Notice the missing `conj`.
-
-#### Thoughts
-
-- Advantages
-  - Many examples use multiple goals in the body of `fresh`.
-  - There would be one less indentation level.
-- Disadvantages
-  - I won't be able to write `fresh (\x -> g x)` as `fresh g` anymore.
-  - I lose flexibility in the body of a `fresh` since it will always have to be a conjunction of goals.
-
-### Alternative API for `run`
-
-Similarly, we can change the API for `run` as follows:
-
-```elm
-run : Length -> (Value a -> List (Goal a)) -> List (Value a)
-```
-
-And, it leads to similar advantages and disadvantages as it did for `fresh`.
-
-### About `ReifiedVar`
-
-- Explain how it came to be
-- Explain how you can get a reified-name substitution type using it
-- Is it worth the hassle?
