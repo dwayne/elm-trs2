@@ -1,11 +1,15 @@
 module Book.Ch7Alt exposing
     ( zero, one
+    , bitNando
     , bitXoro, bitAndo
     )
 
 {-| Relations from Chapter 7 of The Reasoned Schemer (2nd Edition).
 
+It illustrates how you can use `bitNando` as the starting primitive relation.
+
 @docs zero, one
+@docs bitNando
 @docs bitXoro, bitAndo
 
 -}
